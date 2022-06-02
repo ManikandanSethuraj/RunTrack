@@ -3,10 +3,13 @@ package com.manny.runtrack.db
 import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 
 
 @Entity(tableName = "running_table")
 data class RunClass(
+
+
     var img: Bitmap?= null,
     var timestamp: Long = 0L,
     var avgSpeedKMS : Float = 0f,
@@ -16,5 +19,5 @@ data class RunClass(
 ) {
 
     @PrimaryKey(autoGenerate = true)
-    var id : String ?= null
+    var id : Int ?= null
 }

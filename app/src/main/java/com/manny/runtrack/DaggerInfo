@@ -1,0 +1,57 @@
+Dependency Injection:
+
+Dependency:
+Kotlin object or variable in dependent on another object
+If ObjectA is relies on ObjectB, then ObjectB is the dependency of ObjectA.
+
+Injection:
+
+@Inject
+Injects the depended libraries into the class.
+
+e.g. (without Dependency Injection)
+
+viewModel <- viewModelFactory <- repository <- roomdatabase
+
+lateinit var roomDataBase : MyDataBase
+lateinit var repository : MyRepository
+lateinit var  viewModel : MyViewModel
+lateinit var viewModelFactory : MyViewModelFactory
+
+in onCreate Function:
+
+roomDataBase = MyDataBase.create(this)
+repository = MyRepository(roomDataBase)
+viewModelFactory = MyViewModelFactory(application, repository)
+viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MyViewModel::class.java)
+
+
+e.g. (with Dependency Injection)
+
+lateinit var  viewModel : MyViewModel
+
+@Inject
+lateinit var viewModelFactory : MyViewModelFactory
+
+in onCreate Function:
+
+viewModel = ViewModelProvider(this, viewModelFactory)
+             .get(MyViewModel::class.java)
+
+Dagger2, Koin -> Dependency injection
+
+Dagger2 is used over Koin because the Dagger2 injects the
+dependencies in Compile Time while Koin does that in Run time.
+
+
+The Module Class:
+
+The Module class has to created to let the Dagger know what needs to be injected.
+
+Manual determines what needs to be injected which is put into the Module Class.
+
+
+
+
+
