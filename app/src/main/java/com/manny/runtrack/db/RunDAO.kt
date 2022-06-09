@@ -13,7 +13,7 @@ interface RunDAO {
 
 
     @Insert(onConflict = REPLACE)
-    suspend fun insert(runClass: RunClass) : Long
+    suspend fun insert(runClass: RunClass)
 
     @Delete()
     suspend fun delete(runClass: RunClass)

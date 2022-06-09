@@ -8,11 +8,7 @@ import androidx.room.TypeConverters
 version = 1)
 @TypeConverters(Convertors::class)
 abstract class RunningDatabase : RoomDatabase() {
-
     abstract fun getRunDAO() : RunDAO
-
-    var instance : RunningDatabase ?= null
-
-
+   // var instance : RunningDatabase ?= null
 
 }
