@@ -28,7 +28,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         mapView.onCreate(savedInstanceState)
 
         btnToggleRun.setOnClickListener(View.OnClickListener {
-            startService(ACTION_START_OR_RESUME_SERVICE)
+            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
         })
 
 
@@ -39,7 +39,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     }
 
 
-    private fun startService(action : String) =
+    private fun sendCommandToService(action : String) =
         Intent(requireContext(),TrackingService::class.java).also {
             it.action = action
             requireContext().startService(it)
