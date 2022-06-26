@@ -7,10 +7,13 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.manny.runtrack.R
 import com.manny.runtrack.ui.MainActivity
 import com.manny.runtrack.util.Constants
@@ -40,9 +43,23 @@ import timber.log.Timber
  * A pending Intent has to be introduced to open the App on the click of notification in notification toolbar
  */
 
+typealias polyline = MutableList<LatLng>
+typealias polylines =MutableList<polyline>
+
 class TrackingService : LifecycleService() {
 
     var isFirstRun = true
+
+    companion object{
+        val isTracking = MutableLiveData<Boolean>()
+        val pathPoints = MutableLiveData<polylines>()
+    }
+
+
+    private fun postInitialValues(){
+        isTracking.postValue(false)
+        pathPoints.postValue(mutableListOf())
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
@@ -69,6 +86,21 @@ class TrackingService : LifecycleService() {
 
         return super.onStartCommand(intent, flags, startId)
     }
+
+
+    private fun addPolyLine(location : Location?) {
+        location?.let {
+            val pos = LatLng(it.latitude, it.longitude)
+            pathPoints.value?.apply {
+                last().add(pos)
+            }
+        }
+    }
+
+    private fun addEmptyPolylines() = pathPoints.value?.apply {
+     add(mutableListOf())
+        pathPoints.postValue(this)
+    } ?: pathPoints.postValue(mutableListOf(mutableListOf()))
 
     private fun startForegroundService(){
 
@@ -98,7 +130,6 @@ class TrackingService : LifecycleService() {
             it.action = ACTION_SHOW_TRACKING_FRAGMENT
         },
         FLAG_UPDATE_CURRENT
-
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
